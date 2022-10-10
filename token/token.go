@@ -34,8 +34,8 @@ const (
 	LBRACE = "{"
 	RBRACE = "}"
 
-	FUNCTION = "FUNCTION"
-	LET      = "LET"
+	FUNCTION = "fn"
+	LET      = "let"
 
 	IF     = "if"
 	ELSE   = "else"
