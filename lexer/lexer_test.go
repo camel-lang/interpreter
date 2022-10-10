@@ -3,7 +3,6 @@ package lexer
 import ( 
 	"testing"
 	"xxx/token"
-	"xxx/lexer"
 ) 
 
 
@@ -21,7 +20,7 @@ func TestNextToken(t *testing.T) {
 		{token.SEMICOLON , ";"},
 		{token.COMMA , ","}, }
 
-	lex := lexer.New(input) 
+	lex := New(input) 
 
 	for idx , testCase := range(tests) { 
 	
