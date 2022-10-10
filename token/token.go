@@ -32,12 +32,12 @@ const (
 
 )
 
-var keywords map[string]Token { 
+var keywords = map[string]TokenType { 
 	"fn" : FUNCTION , 
-	"let" : LET 
+	"let" : LET ,
 }
 
-func LookUpIdent(ident string) { 
+func LookUpIdent(ident string) TokenType { 
 
 	if keyword , ok := keywords[ident] ; ok { 
 		return keyword  
