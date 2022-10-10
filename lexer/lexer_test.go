@@ -14,7 +14,9 @@ x + y ;
 }; 
 let result = add(five , ten);
 
-< > 5! -* if else true false`
+< > 5! -* if else true false
+2 != 3 
+`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -66,6 +68,9 @@ let result = add(five , ten);
 		{token.ELSE, "else"},
 		{token.TRUE, "true"},
 		{token.FALSE, "false"},
+		{token.INT , "2"} , 
+		{token.NOT_EQ , "!="} , 
+		{token.INT , "3"} , 
 		{token.EOF, ""},
 	}
 
