@@ -15,7 +15,7 @@ x + y ;
 }; 
 let result = add(five , ten);
 
-< > 5! -*`
+< > 5! -* if else true false`
 
 	tests := []struct { 
 		expectedType token.TokenType 
@@ -63,8 +63,11 @@ let result = add(five , ten);
 		{token.BANG , "!"} , 
 		{token.MINUS , "-"} , 
 		{token.ASTERISK , "*"} , 
+		{token.IF , "if"} , 
+		{token.ELSE , "else"} , 
+		{token.TRUE , "true"} , 
+		{token.FALSE , "false"} , 
 		{token.EOF , ""} , 
-		
 	}
 
 	lex := New(input) 
