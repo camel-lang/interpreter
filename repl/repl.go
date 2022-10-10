@@ -1,32 +1,31 @@
 package repl
 
-import ( 
-
-	"bufio" 
-	"fmt" 
+import (
+	"bufio"
+	"fmt"
 	"io"
-	"xxx/token"
 	"xxx/lexer"
-)  
+	"xxx/token"
+)
 
-const PROMPT = ">> " 
+const PROMPT = ">> "
 
-func Start(in io.Reader , out io.Writer) { 
+func Start(in io.Reader, out io.Writer) {
 
-	scanner := bufio.NewScanner(in) 
+	scanner := bufio.NewScanner(in)
 
-	for { 
+	for {
 
-		fmt.Printf(PROMPT) 
-		scanned := scanner.Scan() 
+		fmt.Printf(PROMPT)
+		scanned := scanner.Scan()
 		if !scanned {
-			return 
-		} 
-		 
-		line := scanned.Text() 	
-		lex := lexer.New(line) 
-		for tok := lex.NextToken() ; tok.Type != token.EOF ; tok = lex.NextToken{ 
-			fmt.Printf("%+v\n" , tok )
-		} 
-	} 
-} 
+			return
+		}
+
+		line := scanner.Text()
+		lex := lexer.New(line)
+		for tok := lex.NextToken(); tok.Type != token.EOF; tok = lex.NextToken() {
+			fmt.Printf("%+v\n", tok)
+		}
+	}
+}
