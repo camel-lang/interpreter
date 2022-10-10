@@ -4,130 +4,129 @@ import (
 	"xxx/token"
 )
 
-type Lexer struct { 
-
-	input string 
-	position int 
-	readPosition int 
-	char byte 
-
-} 
-
-func New(input string) *Lexer { 
-	lex := &Lexer{input: input} 
-	lex.readChar() 
-	return lex 
+type Lexer struct {
+	input        string
+	position     int
+	readPosition int
+	char         byte
 }
 
-func (lexer *Lexer) readChar() { 
-	
-	if lexer.readPosition >= len(lexer.input) { 
-		lexer.char = 0 
-	} else { lexer.char = lexer.input[lexer.readPosition] } 
-	lexer.position = lexer.readPosition 
-	lexer.readPosition += 1 
-}	
+func New(input string) *Lexer {
+	lex := &Lexer{input: input}
+	lex.readChar()
+	return lex
+}
+
+func (lexer *Lexer) readChar() {
+
+	if lexer.readPosition >= len(lexer.input) {
+		lexer.char = 0
+	} else {
+		lexer.char = lexer.input[lexer.readPosition]
+	}
+	lexer.position = lexer.readPosition
+	lexer.readPosition += 1
+}
 
 func (lex *Lexer) NextToken() token.Token {
 
-	var tok token.Token 
-	lex.eatSpace() 
-	
-	switch lex.char { 
-		
-		case '=' : 
-			tok = newToken(token.ASSIGN , lex.char)
-		case '+' : 
-			tok = newToken(token.PLUS , lex.char)
-		case '-' : 
-			tok = newToken(token.MINUS , lex.char) 
-		case '*' : 
-			tok = newToken(token.ASTERISK , lex.char) 
-		case '/' :
-			tok = newToken(token.SLASH , lex.char) 
-		case '<' : 
-			tok = newToken(token.LT , lex.char) 
-		case '>' : 
-			tok = newToken(token.GT , lex.char) 
-		case ';' : 
-			tok = newToken(token.SEMICOLON , lex.char)
-		case ',' : 
-			tok = newToken(token.COMMA , lex.char)
-		case '(' : 
-			tok = newToken(token.LPAREN , lex.char)
-		case ')' :
-			tok = newToken(token.RPAREN , lex.char)
-		case '{' : 
-			tok = newToken(token.LBRACE , lex.char)
-		case '}' : 
-			tok = newToken(token.RBRACE , lex.char)
-		case '!' : 
-			tok = newToken(token.BANG , lex.char) 
-		case 0 : tok.Literal = "" 
-			tok.Type = token.EOF
-		default : 
-			if isLetter(lex.char) { 
-				tok.Literal = lex.readIdentifier() 
-				tok.Type = token.LookUpIdent(tok.Literal) 
+	var tok token.Token
+	lex.eatSpace()
 
-				return tok
+	switch lex.char {
 
-			} else if isDigit(lex.char) { 
-				tok.Literal = lex.readNumber() 
-				tok.Type = token.INT	
+	case '=':
+		tok = newToken(token.ASSIGN, lex.char)
+	case '+':
+		tok = newToken(token.PLUS, lex.char)
+	case '-':
+		tok = newToken(token.MINUS, lex.char)
+	case '*':
+		tok = newToken(token.ASTERISK, lex.char)
+	case '/':
+		tok = newToken(token.SLASH, lex.char)
+	case '<':
+		tok = newToken(token.LT, lex.char)
+	case '>':
+		tok = newToken(token.GT, lex.char)
+	case ';':
+		tok = newToken(token.SEMICOLON, lex.char)
+	case ',':
+		tok = newToken(token.COMMA, lex.char)
+	case '(':
+		tok = newToken(token.LPAREN, lex.char)
+	case ')':
+		tok = newToken(token.RPAREN, lex.char)
+	case '{':
+		tok = newToken(token.LBRACE, lex.char)
+	case '}':
+		tok = newToken(token.RBRACE, lex.char)
+	case '!':
+		tok = newToken(token.BANG, lex.char)
+	case 0:
+		tok.Literal = ""
+		tok.Type = token.EOF
+	default:
+		if isLetter(lex.char) {
+			tok.Literal = lex.readIdentifier()
+			tok.Type = token.LookUpIdent(tok.Literal)
 
-				return tok
+			return tok
 
-			} else { 	
+		} else if isDigit(lex.char) {
+			tok.Literal = lex.readNumber()
+			tok.Type = token.INT
 
-				tok.Literal = "" 
-				tok.Type = token.ILLEGAL
-		} 
+			return tok
+
+		} else {
+
+			tok.Literal = ""
+			tok.Type = token.ILLEGAL
+		}
 	}
 
-		lex.readChar() 
-		return tok 
-} 
-
-func newToken(tokenType token.TokenType , ch byte) token.Token { 
-	return token.Token{Type: tokenType , Literal: string(ch)}
+	lex.readChar()
+	return tok
 }
 
-
-func (lex *Lexer) readIdentifier() string { 
-	
-	pos := lex.position 
-	for isLetter(lex.char) { 
-		lex.readChar() 
-	} 
-	return lex.input[pos:lex.position] 
-
-} 
-
-func (lex *Lexer) readNumber() string { 
-	pos := lex.position 
-	for isDigit(lex.char) { 
-		lex.readChar() 
-	} 
-	return lex.input[pos:lex.position] 
+func newToken(tokenType token.TokenType, ch byte) token.Token {
+	return token.Token{Type: tokenType, Literal: string(ch)}
 }
-func isDigit(ch byte) bool { 
+
+func (lex *Lexer) readIdentifier() string {
+
+	pos := lex.position
+	for isLetter(lex.char) {
+		lex.readChar()
+	}
+	return lex.input[pos:lex.position]
+
+}
+
+func (lex *Lexer) readNumber() string {
+	pos := lex.position
+	for isDigit(lex.char) {
+		lex.readChar()
+	}
+	return lex.input[pos:lex.position]
+}
+func isDigit(ch byte) bool {
 	return '0' <= ch && ch <= '9'
-} 
-func isLetter(ch byte) bool { 
+}
+func isLetter(ch byte) bool {
 
-	return 'A' <= ch && ch <= 'Z' || 
-		   'a' <= ch && ch <= 'z' || 
-			ch == '_' 
-} 
+	return 'A' <= ch && ch <= 'Z' ||
+		'a' <= ch && ch <= 'z' ||
+		ch == '_'
+}
 
-func (lex *Lexer) eatSpace() { 
-	
-	for lex.char == ' '  || 
+func (lex *Lexer) eatSpace() {
+
+	for lex.char == ' ' ||
 		lex.char == '\n' ||
 		lex.char == '\t' ||
-		lex.char == '\r'  { 
-		lex.readChar() 
-	}	
-} 
-
+		lex.char == '\r' {
+		lex.readChar()
+	}
+}
