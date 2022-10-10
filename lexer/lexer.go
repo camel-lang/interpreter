@@ -2,7 +2,6 @@ package lexer
 
 import "xxx/token"
 
-
 type Lexer struct { 
 
 	input string 
@@ -58,7 +57,4 @@ func (lexer *Lexer) NextToken() token.Token {
 
 func newToken(tokenType token.TokenType , ch byte) token.Token { 
 	return token.Token{Type: tokenType , Literal: string(ch)}
-}
-func Hi() string { 
-	return "hey"
 }
