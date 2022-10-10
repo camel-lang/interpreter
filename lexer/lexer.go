@@ -1,7 +1,8 @@
 package lexer
 
-import "xxx/token"
-
+import (
+	"xxx/token"
+)
 
 type Lexer struct { 
 
@@ -31,15 +32,27 @@ func (lex *Lexer) NextToken() token.Token {
 
 	var tok token.Token 
 	lex.eatSpace() 
-
+	
 	switch lex.char { 
 		
 		case '=' : 
 			tok = newToken(token.ASSIGN , lex.char)
 		case '+' : 
 			tok = newToken(token.PLUS , lex.char)
+		case '-' : 
+			tok = newToken(token.MINUS , lex.char) 
+		case '*' : 
+			tok = newToken(token.ASTERISK , lex.char) 
+		case '/' :
+			tok = newToken(token.SLASH , lex.char) 
+		case '<' : 
+			tok = newToken(token.LT , lex.char) 
+		case '>' : 
+			tok = newToken(token.GT , lex.char) 
 		case ';' : 
 			tok = newToken(token.SEMICOLON , lex.char)
+		case ',' : 
+			tok = newToken(token.COMMA , lex.char)
 		case '(' : 
 			tok = newToken(token.LPAREN , lex.char)
 		case ')' :
@@ -48,8 +61,8 @@ func (lex *Lexer) NextToken() token.Token {
 			tok = newToken(token.LBRACE , lex.char)
 		case '}' : 
 			tok = newToken(token.RBRACE , lex.char)
-		case ',' : 
-			tok = newToken(token.COMMA , lex.char)
+		case '!' : 
+			tok = newToken(token.BANG , lex.char) 
 		case 0 : tok.Literal = "" 
 			tok.Type = token.EOF
 		default : 
