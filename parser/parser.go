@@ -14,7 +14,8 @@ type Parser struct {
 
 func New(lex *lexer.Lexer) *Parser { 
 
-	parser := &Parser{lex: lex} 
+	parser := &Parser{lex: lex}
+					 
 
 	parser.nextToken() 
 	parser.nextToken() 
@@ -51,6 +52,8 @@ func (p *Parser) parseStatement() ast.Statement {
 
 		case token.LET :
 			return p.parseLetStatement() 
+		case token.RETURN : 
+			return p.parseReturn() 
 		default : 
 			return nil 	
 	}
@@ -95,3 +98,16 @@ func (p *Parser) expectPeek(tok token.TokenType) bool {
 		return false 
 	}
 }
+
+func (p *Parser) parseReturn() *ast.ReturnStatement {
+	
+	stmt := &ast.ReturnStatement{Token : p.curToken}
+
+	p.nextToken() 
+	
+	for !p.curTokenIs(token.SEMICOLON) { 
+		p.nextToken() 
+	}
+	
+	return stmt 
+} 
