@@ -8,7 +8,7 @@ import (
 
 type Node interface{ 
 	TokenLiteral() string
-	String string
+	String() string
 } 
 
 type Statement interface{ 
@@ -101,7 +101,7 @@ func (rs *ReturnStatement) String() string {
 	
 	out.WriteString(rs.TokenLiteral() + " ") 
 	if rs.ReturnValue != nil { 
-		out.WriteString(ReturnValue.String()) 
+		out.WriteString(rs.ReturnValue.String()) 
 	}
 
 	out.WriteString(";") 
