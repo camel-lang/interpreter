@@ -46,6 +46,38 @@ let foobar = 23421;`
 	} 
 }
 
+func TestReturnStatement(t *testing.T) { 
+
+	input :=`
+return 4; 
+return 10; 
+return 124124; 
+`
+	lex := lexer.New(input) 
+	p := New(lex) 
+	
+	program := p.ParseProgram() 
+	
+	if len(program.Statements) != 3 { 
+		t.Fatalf("program.Statements doesn't contain 3 elements, got %d", 
+		len(program.Statements)) 
+	} 
+	for _ , stmt := range(program.Statements) { 
+		retStmt , ok := stmt.(*ast.ReturnStatement) 
+		if !ok { 
+			t.Errorf("stmt not *ast.ReturnStatement, got %T instead", 
+			stmt)
+			continue 
+		} 
+
+		if retStmt.TokenLiteral() != "return" { 
+			t.Errorf("token literal wasn't return, got %q instead" , 
+			retStmt.TokenLiteral()) 
+		} 
+
+	} 
+} 
+
 func testLetStatement(t *testing.T , stmt ast.Statement , name string) bool { 
 
 	if stmt.TokenLiteral() != "let" { 
@@ -72,4 +104,6 @@ func testLetStatement(t *testing.T , stmt ast.Statement , name string) bool {
 	}
 	return true 
 }
+
+
 
