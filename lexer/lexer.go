@@ -36,10 +36,10 @@ func (lex *Lexer) NextToken() token.Token {
 	switch lex.char {
 
 	case '=':
-		if lex.peekChar() == '=' { 
-			tok = token.Token{Type: token.EQ ,Literal: "=="} 
-			lex.readChar() 
-		} else { 	
+		if lex.peekChar() == '=' {
+			tok = token.Token{Type: token.EQ, Literal: "=="}
+			lex.readChar()
+		} else {
 			tok = newToken(token.ASSIGN, lex.char)
 		}
 	case '+':
@@ -67,10 +67,10 @@ func (lex *Lexer) NextToken() token.Token {
 	case '}':
 		tok = newToken(token.RBRACE, lex.char)
 	case '!':
-		if lex.peekChar() == '=' { 
+		if lex.peekChar() == '=' {
 			lex.readChar()
-			tok = token.Token{Type: token.NOT_EQ , Literal: "!="} 
-		} else {  
+			tok = token.Token{Type: token.NOT_EQ, Literal: "!="}
+		} else {
 			tok = newToken(token.BANG, lex.char)
 		}
 	case 0:
@@ -141,10 +141,10 @@ func (lex *Lexer) eatSpace() {
 	}
 }
 
-func (lex *Lexer) peekChar() byte { 
+func (lex *Lexer) peekChar() byte {
 
-	if lex.readPosition >= len(lex.input) { 
+	if lex.readPosition >= len(lex.input) {
 		return 0
-	}	
-	return lex.input[lex.readPosition] 
+	}
+	return lex.input[lex.readPosition]
 }

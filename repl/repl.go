@@ -2,10 +2,10 @@ package repl
 
 import (
 	"bufio"
-	"fmt"
-	"io"
 	"camel/lexer"
 	"camel/token"
+	"fmt"
+	"io"
 )
 
 const logo = `
@@ -18,6 +18,7 @@ const logo = `
          ""    ""
 
 ------------------------------------------------`
+
 /*
 Thank you for visiting https://asciiart.website/
 This ASCII pic can be found at

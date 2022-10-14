@@ -20,8 +20,8 @@ const (
 	ASTERISK = "*"
 	SLASH    = "/"
 	ASSIGN   = "="
-	EQ 		 = "==" 
-	NOT_EQ   = "!=" 
+	EQ       = "=="
+	NOT_EQ   = "!="
 
 	LT = "<"
 	GT = ">"

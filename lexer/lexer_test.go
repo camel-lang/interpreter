@@ -1,8 +1,8 @@
 package lexer
 
 import (
-	"testing"
 	"camel/token"
+	"testing"
 )
 
 func TestNextToken(t *testing.T) {
@@ -68,9 +68,9 @@ let result = add(five , ten);
 		{token.ELSE, "else"},
 		{token.TRUE, "true"},
 		{token.FALSE, "false"},
-		{token.INT , "2"} , 
-		{token.NOT_EQ , "!="} , 
-		{token.INT , "3"} , 
+		{token.INT, "2"},
+		{token.NOT_EQ, "!="},
+		{token.INT, "3"},
 		{token.EOF, ""},
 	}
 
