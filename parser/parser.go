@@ -4,6 +4,8 @@ import (
 	"camel/ast" 
 	"camel/token" 
 	"camel/lexer"
+	"strconv"
+	"fmt"
 )
 
 const ( 
@@ -48,6 +50,7 @@ func New(lex *lexer.Lexer) *Parser {
 
 	parser.prefixParseFns = make(map[token.TokenType]prefixParseFn) 	
 	parser.registerPrefix(token.IDENT , parser.parseIdentifier) 
+	parser.registerPrefix(token.INT , parser.parseIntegerLiteral) 
 
 	return parser
 }
@@ -150,6 +153,18 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 func (p *Parser) parseIdentifier() ast.Expression { 
 
 	return &ast.Identifier{ Token: p.curToken , Value: p.curToken.Literal } 
+}
+
+func (p *Parser) parseIntegerLiteral() ast.Expression { 
+	
+	lit := &ast.IntegerLiteral{Token: p.curToken} 
+	value , err := strconv.ParseInt(p.curToken.Literal , 0 , 64) 
+	if err != nil { 
+		fmt.Errorf(err.Error()) 
+		return nil 
+	}
+	lit.Value = value 
+	return lit
 } 
 func (p *Parser) curTokenIs(tok token.TokenType) bool { 
 	return p.curToken.Type == tok 
