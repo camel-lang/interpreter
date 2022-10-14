@@ -21,11 +21,11 @@ type Parser struct {
 }
 
 func (p *Parser) registerPrefix(tokenType token.Token , fn prefixParseFn) { 
-	prefixParseFns[tokenType] = fn 
+	p.prefixParseFns[tokenType] = fn 
 }
 
 func (p *Parser) registerInfix(tokenType token.Token , fn infixParseFn) { 
-	infixParseFns[tokenType] = fn
+	p.infixParseFns[tokenType] = fn
 }
 func New(lex *lexer.Lexer) *Parser { 
 
