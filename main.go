@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/user"
-	"xxx/repl"
+	"camel/repl"
 )
 
 func main() {
@@ -12,6 +12,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	fmt.Printf("Hello! %s, This is xxx programming language!\n",
 		user.Username)
 	fmt.Printf("Feel free to type in commands\n")

@@ -1,17 +1,32 @@
 package parser 
 
 import ( 
-	"xxx/ast" 
-	"xxx/token" 
-	"xxx/lexer"
+	"camel/ast" 
+	"camel/token" 
+	"camel/lexer"
+)
+
+type ( 
+	prefixParseFn func() ast.Expression 
+	infixParseFn func(ast.Expression) ast.Expression 
 )
 
 type Parser struct { 
 	lex *lexer.Lexer
 	curToken token.Token 
 	peekToken token.Token
+	
+	prefixParseFns map[token.Token]prefixParseFn
+	infixParseFns map[token.Token]infixParseFn
 }
 
+func (p *Parser) registerPrefix(tokenType token.Token , fn prefixParseFn) { 
+	prefixParseFns[tokenType] = fn 
+}
+
+func (p *Parser) registerInfix(tokenType token.Token , fn infixParseFn) { 
+	infixParseFns[tokenType] = fn
+}
 func New(lex *lexer.Lexer) *Parser { 
 
 	parser := &Parser{lex: lex}
@@ -110,4 +125,7 @@ func (p *Parser) parseReturn() *ast.ReturnStatement {
 	}
 	
 	return stmt 
-} 
+}
+
+
+ 

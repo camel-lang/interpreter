@@ -3,8 +3,8 @@ package parser
 
 import ( 
 	"testing"
-	"xxx/lexer" 
-	"xxx/ast" 
+	"camel/lexer" 
+	"camel/ast" 
 ) 
 
 
@@ -89,21 +89,21 @@ func TestIdentifierExpression(t *testing.T) {
 	
 	if len(program.Statements) != 1 { 
 		t.Fatalf("Expected program length 1, got %d" , 
-		len(program.Statements) 
+		len(program.Statements))
 	}
 	
 	stmt , ok := program.Statements[0].(*ast.ExpressionStatement) 
 	
 	if !ok { 
 		t.Fatalf("program.Statements[0] not *ast.ExpressionStatement, got %T" , 	
-		program.Statements[0]) 
+		program.Statements[0])
 	} 	
 	
 	ident , ok := stmt.Expression.(*ast.Identifier)
 	 
 	if !ok { 
 		t.Fatalf("stmt.Expression is not *ast.Identifier, got %T" , 
-		stmt.Expression) 
+		stmt.Expression)
 	} 
 	
 	if ident.Value != "foobar" { 

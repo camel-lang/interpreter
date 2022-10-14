@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"xxx/token"
+	"camel/token"
 )
 
 type Lexer struct {

@@ -1,7 +1,7 @@
 package ast 
 
 import ( 
-	"xxx/token"
+	"camel/token"
 	"bytes"
 ) 
 
