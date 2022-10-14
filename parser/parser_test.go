@@ -2,7 +2,8 @@ package parser
 
 
 import ( 
-	"testing"
+	"fmt"
+	"testing" 
 	"camel/lexer" 
 	"camel/ast" 
 ) 
@@ -148,6 +149,50 @@ func testIntegerLiteralExpression(t *testing.T) {
 
 } 
 
+func TestParsingPrefixExpressions(t *testing.T) { 
+
+	tests := []struct{ 
+		Input string 
+		Operator string 
+		IntegerValue int64 
+	}{ 
+		{"!15" , "!", 15} , 
+		{"-5" , "-" , 5} , 
+	}
+
+	for _ , tt := range tests { 
+		
+		lex := lexer.New(tt.Input) 
+		p := New(lex) 
+		program := p.ParseProgram() 
+		
+		if len(program.Statements) != 1 { 
+			t.Fatalf("wrong length for program.Statements, got %d", 
+			len(program.Statements))
+		}
+
+		stmt , ok := program.Statements[0].(*ast.ExpressionStatement) 
+		if !ok {
+			t.Fatalf("wrong type for stmt, got %T, expected *ast.ExpressionStatement" , 
+			program.Statements[0]) 	
+		}
+
+		exp , ok := stmt.Expression.(*ast.PrefixExpression) 
+		if !ok { 
+			t.Fatalf("wrong type for stmt, got %T, expected *ast.IntegerLiteral" , 
+			program.Statements[0])
+		} 
+
+		if exp.Operator != tt.Operator  { 
+			t.Fatalf("exp.Operator is not %s, got %s", 
+			tt.Operator , exp.Operator) 
+		}
+		
+		if !testIntegerLiteral(t , exp.Right , tt.IntegerValue) { 
+			return 
+		} 
+	} 
+} 
 func testLetStatement(t *testing.T , stmt ast.Statement , name string) bool { 
 
 	if stmt.TokenLiteral() != "let" { 
@@ -174,6 +219,35 @@ func testLetStatement(t *testing.T , stmt ast.Statement , name string) bool {
 	}
 	return true 
 }
+
+func testIntegerLiteral(t *testing.T , il ast.Expression, value int64) bool { 
+		
+	integ , ok := il.(*ast.IntegerLiteral) 
+	
+	if !ok { 
+		t.Errorf("il not *ast.IntegerLiteral, got %T" , il)
+		return false 
+	} 
+
+	if integ.Value != value { 
+		t.Errorf("integ.Value not %d, got %d", 
+		value , integ.Value) 
+		return false 
+	} 
+	 
+	if integ.TokenLiteral() != fmt.Sprintf("%d" , value) { 
+		t.Errorf("integ.TokenLiteral() returned %s, expected %d" , 
+		integ.TokenLiteral() , value) 
+		return false 
+	}	
+	
+	return true 
+
+
+	
+
+
+} 
 
 
 
