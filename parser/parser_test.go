@@ -126,7 +126,7 @@ func testIntegerLiteralExpression(t *testing.T) {
 	
 	if len(program.Statements) != 1 { 
 		t.Fatalf("wrong length for program.Statements, got %d", 
-		len(program.Statements)
+		len(program.Statements))
 	}
 
 	stmt , ok := program.Statements[0].(*ast.ExpressionStatement) 
@@ -135,7 +135,7 @@ func testIntegerLiteralExpression(t *testing.T) {
 		program.Statements[0]) 	
 	} 
 
-	iliteral , ok := program.Statements[0].(*ast.IntegerLiteral) 
+	iliteral , ok := stmt.Expression.(*ast.IntegerLiteral) 
 	if !ok { 
 		t.Fatalf("wrong type for stmt, got %T, expected *ast.IntegerLiteral" , 
 		program.Statements[0])
