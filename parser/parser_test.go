@@ -343,3 +343,26 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 	return true
 
 }
+
+func testLiteralExpression(t *testing.T, 
+						   exp ast.Expression, 
+						   val {}interface
+) bool { 
+
+	switch val.(type) { 
+
+	case int : 
+		return testIntegerLiteral(t , exp , int64(val)) 
+	case int64 : 
+		return testIntegerLiteral(t , exp , val) 
+	case bool : 
+		return testBooleanLiteral(t , exp , val)
+	case string : 
+		return testIdentifierLiteral(t , exp , val) 
+	}
+
+	t.Errorf("type of val can't be handled. got: %T" , val)	
+	return false 
+	}
+}
+	
