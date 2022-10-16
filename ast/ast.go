@@ -206,6 +206,7 @@ type IfExpression struct {
 	Alternative *BlockStatement
 }
 
+func (ie *IfExpression) expressionNode() {} 
 func (ie *IfExpression) TokenLiteral() string { 
 	return ie.Token.Literal
 }
@@ -225,14 +226,14 @@ func (ie *IfExpression) String() string {
 	return out.String()
 }
 
-type BlockStatement { 
+type BlockStatement struct { 
 	Token token.Token 
 	Statements []Statement 
 } 
 
 func (bs *BlockStatement) statementNode() {} 
 func (bs *BlockStatement) TokenLiteral() string { 
-	return Token.Literal 
+	return bs.Token.Literal 
 }
 func (bs *BlockStatement) String() string { 
 	var out bytes.Buffer 
