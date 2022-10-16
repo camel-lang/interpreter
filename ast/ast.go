@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"strings"
 	"camel/token"
 )
 
@@ -257,13 +258,13 @@ func (fl *FunctionLiterals) TokenLiteral() string {
 func(fl *FunctionLiterals) String() string { 
 	var out bytes.Buffer 
 	
-	param := []string{} 
+	params := []string{} 
 	for _ , p := range fl.Parameters { 
-		params = append(params , p)
+		params = append(params , p.Value)
 	}
 	out.WriteString(fl.TokenLiteral()) 
 	out.WriteString("(")
-	out.WriteString(strings.Join(params , ", ") 
+	out.WriteString(strings.Join(params , ", "))
 	out.WriteString(")")
 	out.WriteString(fl.Body.String()) 
 
