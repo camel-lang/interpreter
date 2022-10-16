@@ -244,6 +244,54 @@ func TestParsingInfixExpression(t *testing.T) {
 	}
 
 }
+
+func TestOperatorPrecedenceParsing(t *testing.T) {
+
+	tests := []struct {
+		input    string
+		expected string
+	}{
+
+		{
+		"-a * b", 
+		"((-a) * b)", 
+		}, 
+		{
+		"a + b + c", 
+		"((a + b) + c)",
+		},
+		{
+		"!-a", 
+		"(!(-a))",
+		},
+		{
+		"a - b * c + x", 
+		"((a - (b * c)) + x)",
+		},
+		{
+		"a < b == c / d", 
+		"((a < b) == (c / d))",
+		},
+		{
+		"3 - 4; 6 * 7", 
+		"(3 - 4)(6 * 7)",
+		},
+	}
+
+	for _, tt := range tests {
+
+		lex := lexer.New(tt.input)
+		p := New(lex)
+		program := p.ParseProgram()
+
+		if program.String() != tt.expected {
+			t.Fatalf("expected: %s ,got: %s",
+				tt.expected, program.String())
+		}
+
+	}
+
+}
 func testLetStatement(t *testing.T, stmt ast.Statement, name string) bool {
 
 	if stmt.TokenLiteral() != "let" {
