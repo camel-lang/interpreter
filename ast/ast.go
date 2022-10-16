@@ -244,18 +244,18 @@ func (bs *BlockStatement) String() string {
 	return out.String() 
 }
 
-type FunctionLiterals struct { 
+type FunctionLiteral struct { 
 	Token token.Token 
 	Parameters []*Identifier 
 	Body *BlockStatement 
 }
 
-func (fl *FunctionLiterals) expressionNode() {} 
-func (fl *FunctionLiterals) TokenLiteral() string { 
+func (fl *FunctionLiteral) expressionNode() {} 
+func (fl *FunctionLiteral) TokenLiteral() string { 
 	return fl.Token.Literal
 }
 
-func(fl *FunctionLiterals) String() string { 
+func(fl *FunctionLiteral) String() string { 
 	var out bytes.Buffer 
 	
 	params := []string{} 
