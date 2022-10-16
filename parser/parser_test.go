@@ -28,7 +28,6 @@ let foobar = 23421;`
 	tests := []struct {
 		expectedIdentifier string
 	}{
-
 		{"x"},
 		{"y"},
 		{"foobar"},
@@ -192,60 +191,57 @@ func TestParsingPrefixExpressions(t *testing.T) {
 func TestParsingInfixExpression(t *testing.T) {
 
 	tests := []struct {
-		input string 
-		left int64 
-		operator string 
-		right int64 
-	}{ 
-		{"5 + 5" , 5 , "+" , 5} , 
-		{"5 - 5" , 5 , "-" , 5} ,	
-		{"5 / 5" , 5 , "/" , 5} ,	
-		{"5 * 5" , 5 , "*" , 5} ,	
-		{"5 < 5" , 5 , "<" , 5} ,	
-		{"5 > 5" , 5 , ">" , 5} ,	
-		{"5 == 5" , 5 , "==" , 5} ,	
-		{"5 != 5" , 5 , "!=" , 5} ,	
+		input    string
+		left     int64
+		operator string
+		right    int64
+	}{
+		{"5 + 5", 5, "+", 5},
+		{"5 - 5", 5, "-", 5},
+		{"5 / 5", 5, "/", 5},
+		{"5 * 5", 5, "*", 5},
+		{"5 < 5", 5, "<", 5},
+		{"5 > 5", 5, ">", 5},
+		{"5 == 5", 5, "==", 5},
+		{"5 != 5", 5, "!=", 5},
 	}
 
+	for _, tt := range tests {
 
-	for _ , tt := range tests { 
-	
-		lex := lexer.New(tt.input) 
-		p := New(lex) 
+		lex := lexer.New(tt.input)
+		p := New(lex)
 
-		program := p.ParseProgram() 
+		program := p.ParseProgram()
 
-		if len(program.Statements) != 1 { 
-			t.Fatalf("wrong value for program.Statements, expected: 1, got: %d" , 
-		    len(program.Statements)) 
+		if len(program.Statements) != 1 {
+			t.Fatalf("wrong value for program.Statements, expected: 1, got: %d",
+				len(program.Statements))
 		}
-		
-		stmt , ok := program.Statements[0].(*ast.ExpressionStatement) 
-		if !ok { 
-			t.Fatalf("wrong type for stmt, expected: *ast.ExpressionStatement, got: %T" ,
-			 program.Statements[0]) 
-		} 
 
-		infexp , ok := stmt.Expression.(*ast.InfixExpression) 
-		if !ok { 
-			t.Fatalf("wrong type for infexp, expected: *ast.InfixExpression, got: %T" , 
-			stmt.Expression) 
-		} 
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		if !ok {
+			t.Fatalf("wrong type for stmt, expected: *ast.ExpressionStatement, got: %T",
+				program.Statements[0])
+		}
 
-		if !testIntegerLiteral(t , infexp.Left , tt.left) { 
-			return 
+		infexp, ok := stmt.Expression.(*ast.InfixExpression)
+		if !ok {
+			t.Fatalf("wrong type for infexp, expected: *ast.InfixExpression, got: %T",
+				stmt.Expression)
 		}
-		if tt.operator != infexp.Operator { 
-			t.Fatalf("wrong value for exp.Operator, expected: %s, got: %s" , 
-			tt.operator , infexp.Operator) 
+
+		if !testIntegerLiteral(t, infexp.Left, tt.left) {
+			return
 		}
-		if !testIntegerLiteral(t , infexp.Right , tt.right) { 
-			return 
+		if tt.operator != infexp.Operator {
+			t.Fatalf("wrong value for exp.Operator, expected: %s, got: %s",
+				tt.operator, infexp.Operator)
+		}
+		if !testIntegerLiteral(t, infexp.Right, tt.right) {
+			return
 		}
 
 	}
-	
-
 
 }
 func testLetStatement(t *testing.T, stmt ast.Statement, name string) bool {

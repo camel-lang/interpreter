@@ -1,10 +1,10 @@
 package main
 
 import (
+	"camel/repl"
 	"fmt"
 	"os"
 	"os/user"
-	"camel/repl"
 )
 
 func main() {
