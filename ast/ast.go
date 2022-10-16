@@ -160,7 +160,7 @@ func (pe *PrefixExpression) String() string {
 	return out.String()
 }
 
-func InfixExpression struct { 
+type InfixExpression struct { 
 	Token token.Token 
 	Left Expression 
 	Operator string 
@@ -168,7 +168,7 @@ func InfixExpression struct {
 }
 
 func (ie *InfixExpression) TokenLiteral() string { 
-	return oe.Token.Literal
+	return ie.Token.Literal
 }
 
 func (ie *InfixExpression) expressionNode() {} 
