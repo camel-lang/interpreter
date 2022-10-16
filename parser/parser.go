@@ -3,7 +3,7 @@ package parser
 import (
 	"camel/ast"
 	"camel/lexer"
-	"camel/token"
+	"camel/token" 
 	"fmt"
 	"strconv"
 )
@@ -61,6 +61,7 @@ func New(lex *lexer.Lexer) *Parser {
 	parser.nextToken()
 
 	parser.prefixParseFns = make(map[token.TokenType]prefixParseFn)
+	parser.infixParseFns  = make(map[token.TokenType]infixParseFn) 
 	parser.registerPrefix(token.IDENT, parser.parseIdentifier)
 	parser.registerPrefix(token.INT, parser.parseIntegerLiteral)
 	parser.registerPrefix(token.MINUS, parser.parsePrefixExpression)
@@ -162,12 +163,24 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 
 func (p *Parser) parseExpression(precedence int) ast.Expression {
 
-	prefix := p.prefixParseFns[p.curToken.Type]
-	if prefix == nil {
+	prefixFunc := p.prefixParseFns[p.curToken.Type]
+	if prefixFunc == nil {
+		fmt.Printf("no prefix function registered for %v"  ,
+		p.curToken.Type) 
 		return nil
 	}
 
-	return prefix()
+	left := prefixFunc()
+	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() { 
+		infixFunc := p.infixParseFns[p.peekToken.Type] 
+		if infixFunc == nil { 
+			return left
+		}
+		p.nextToken() 
+		left = infixFunc(left) 
+	}
+
+	return left  
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
