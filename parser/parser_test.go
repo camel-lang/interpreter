@@ -292,6 +292,7 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 	}
 
 }
+
 func testLetStatement(t *testing.T, stmt ast.Statement, name string) bool {
 
 	if stmt.TokenLiteral() != "let" {
@@ -319,6 +320,63 @@ func testLetStatement(t *testing.T, stmt ast.Statement, name string) bool {
 	return true
 }
 
+func testLiteralExpression(
+	t *testing.T, 
+	exp ast.Expression, 
+	val interface{}, 
+) bool { 
+
+	switch v := val.(type) { 
+
+	case int : 
+		return testIntegerLiteral(t , exp , int64(v)) 
+	case int64 : 
+		return testIntegerLiteral(t , exp , v) 
+	case bool : 
+		return testBooleanLiteral(t , exp , v)
+	case string : 
+		return testIdentifier(t , exp , v) 
+	}
+
+	t.Errorf("type of val can't be handled. got: %T" , val)	
+	return false 
+}
+	
+func testBooleanLiteral(
+	t *testing.T, 
+	exp ast.Expression, 
+	val bool, 
+) bool { 
+	return true 	
+}
+
+func testIdentifier(
+	t *testing.T, 
+	exp ast.Expression, 
+	val string, 
+) bool { 
+	ident , ok := exp.(*ast.Identifier) 
+
+	if !ok { 
+		t.Errorf("expected *ast.Identifier for exp, got: %T", exp)		
+		return false 
+	} 
+
+	if ident.Value != val {
+		t.Errorf("wrong value for val, expected: %s, got: %s" , 
+		ident.Value , val)
+		return false 
+	}
+	if ident.TokenLiteral() != val { 
+		t.Errorf("wrong value for ident.TokenLiteral(), expected: %s, got: %s" , 
+		ident.Value , ident.TokenLiteral())
+		return false 
+
+	}
+	
+	return true 	
+}
+
 func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 
 	integ, ok := il.(*ast.IntegerLiteral)
@@ -344,40 +402,3 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 
 }
 
-func testLiteralExpression(
-	t *testing.T, 
-	exp ast.Expression, 
-	val interface{}, 
-) bool { 
-
-	switch v := val.(type) { 
-
-	case int : 
-		return testIntegerLiteral(t , exp , int64(v)) 
-	case int64 : 
-		return testIntegerLiteral(t , exp , v) 
-	case bool : 
-		return testBooleanLiteral(t , exp , v)
-	case string : 
-		return testIdentifierLiteral(t , exp , v) 
-	}
-
-	t.Errorf("type of val can't be handled. got: %T" , val)	
-	return false 
-}
-	
-func testBooleanLiteral(
-	t *testing.T, 
-	exp ast.Expression, 
-	val bool, 
-) bool { 
-	return true 
-}
-
-func testIdentifierLiteral(
-	t *testing.T, 
-	exp ast.Expression, 
-	val string, 
-) bool { 
-	return true 
-}
