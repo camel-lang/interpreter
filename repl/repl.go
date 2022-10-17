@@ -8,7 +8,8 @@ import (
 	"io"
 )
 
-const logo = `
+const Logo = `
+
 
      __,  .-.  .-.
     (__ _ |  \/  | _
@@ -30,7 +31,6 @@ const PROMPT = ">> "
 func Start(in io.Reader, out io.Writer) {
 
 	scanner := bufio.NewScanner(in)
-	fmt.Println(logo)
 
 	for {
 

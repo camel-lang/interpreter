@@ -13,6 +13,7 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Println(repl.Logo) 
 	fmt.Printf("Hello! %s, This is xxx programming language!\n",
 		user.Username)
 	fmt.Printf("Feel free to type in commands\n")
