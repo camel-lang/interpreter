@@ -14,7 +14,7 @@ func main() {
 	}
 
 	fmt.Println(repl.Logo) 
-	fmt.Printf("Hello! %s, This is xxx programming language!\n",
+	fmt.Printf("Hello! %s, This is camel programming language!\n",
 		user.Username)
 	fmt.Printf("Feel free to type in commands\n")
 
