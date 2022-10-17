@@ -30,6 +30,8 @@ var precedences = map[token.TokenType]int{
 
 	token.LT: LESSGREATER,
 	token.GT: LESSGREATER,
+	
+	token.LPAREN: CALL, 
 }
 
 type (
@@ -80,6 +82,7 @@ func New(lex *lexer.Lexer) *Parser {
 	parser.registerInfix(token.GT, parser.parseInfixExpression)
 	parser.registerInfix(token.EQ, parser.parseInfixExpression)
 	parser.registerInfix(token.NOT_EQ, parser.parseInfixExpression)
+	parser.registerInfix(token.LPAREN , parser.parseCallExpression)
 
 	return parser
 }
@@ -333,6 +336,38 @@ func (p *Parser) parseFunctionParameters() []*ast.Identifier {
 	}		
 	return identifiers
 } 
+
+func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression { 
+	exp := &ast.CallExpression{Token: p.curToken, Function: function} 
+	exp.Arguments = p.parseCallArguments() 
+
+	return exp 
+}
+
+func (p *Parser) parseCallArguments() []ast.Expression { 
+	args := []ast.Expression{} 
+
+	if p.peekTokenIs(token.RPAREN) { 
+		p.nextToken() 
+		return args
+	}	
+
+	p.nextToken() 
+	args = append(args , p.parseExpression(LOWEST))
+
+	for p.peekTokenIs(token.COMMA) { 
+		p.nextToken()
+		p.nextToken() 
+		args = append(args , p.parseExpression(LOWEST))
+	}
+
+	if !p.expectPeek(token.RPAREN) { 
+		return nil
+	}
+
+	return args 
+}
+
 func (p *Parser) curTokenIs(tok token.TokenType) bool {
 	return p.curToken.Type == tok
 }
