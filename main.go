@@ -13,7 +13,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(repl.Logo) 
+	fmt.Println(repl.Logo)
 	fmt.Printf("Hello! %s, This is camel programming language!\n",
 		user.Username)
 	fmt.Printf("Feel free to type in commands\n")

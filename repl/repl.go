@@ -42,8 +42,8 @@ func Start(in io.Reader, out io.Writer) {
 
 		line := scanner.Text()
 		lex := lexer.New(line)
-		parser := parser.New(lex) 
-		program := parser.ParseProgram() 
-		fmt.Printf("%s\n" , program.String()) 
+		parser := parser.New(lex)
+		program := parser.ParseProgram()
+		fmt.Printf("%s\n", program.String())
 	}
 }
