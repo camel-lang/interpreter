@@ -54,7 +54,7 @@ func TestBangOperator(t *testing.T) {
 		expectedValue bool
 	}{ 
 		{"!true", false}, 
-		{"!!false", true}, 
+		{"!!false", false}, 
 		{"!!5", true}, 
 		{"!3", false},
 	}
