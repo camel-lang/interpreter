@@ -64,15 +64,27 @@ func evalPrefixExpression(operator string, obj object.Object) object.Object {
 
 func evalBangOperatorExpression(obj object.Object) object.Object { 
 	
-	switch obj { 
-		case TRUE : 
-			return FALSE
-		case FALSE : 
-			return TRUE 
-		case NULL : 
-			return TRUE 
+	switch obj := obj.(type) { 
+		case *object.Integer: 
+			return evalBangInteger(obj)  
+		case *object.Boolean: 
+			return evalBangBoolean(obj)  
 		default : 
 			return FALSE
 	} 	
+}
+func evalBangInteger(num *object.Integer) *object.Boolean { 
+	if num.Value == 0 {
+		return TRUE 
+	} else { 
+		return FALSE 
+	}
+}
+func evalBangBoolean(boolean *object.Boolean) *object.Boolean {
+	if boolean.Value { 
+		return FALSE 
+	} else { 
+		return TRUE 
+	}
 
 } 
