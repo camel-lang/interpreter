@@ -33,7 +33,7 @@ func Eval(node ast.Node) object.Object {
 		return &object.Integer{Value: node.Value} 
 	
 	case *ast.Boolean : 
-		return evalBoolean(node.Value) 
+		return nativeBoolean(node.Value) 
 	
 	}
 	return nil 
@@ -48,7 +48,7 @@ func evalStatements(stmts []ast.Statement) object.Object {
 	return result
 } 
 
-func evalBoolean(input bool) *object.Boolean { 
+func nativeBoolean(input bool) *object.Boolean { 
 
 	if input { 
 		return TRUE 
@@ -115,6 +115,10 @@ func evalInfixExpression(
 	case left.Type() == object.INTEGER_OBJ && 
 		 right.Type() == object.INTEGER_OBJ :
 		return parseIntegerInfixExpression(operator, left, right) 
+	
+	case left.Type() == object.BOOLEAN_OBJ && 
+		 right.Type() == object.BOOLEAN_OBJ : 
+		return parseBooleanInfixExpression(operator, left, right) 
 
 	default : 
 		return NULL
@@ -139,7 +143,30 @@ func parseIntegerInfixExpression(
 		return &object.Integer{Value: leftVal / rightVal} 
 	case "*": 
 		return &object.Integer{Value: leftVal * rightVal} 
+	case "<": 
+		return nativeBoolean(leftVal < rightVal)  
+	case ">": 
+		return nativeBoolean(leftVal > rightVal)  
+	case "==": 
+		return nativeBoolean(leftVal == rightVal)  
+	case "!=": 
+		return nativeBoolean(leftVal != rightVal)  
 	default : 
 		return NULL
 	}
 }
+
+func parseBooleanInfixExpression(operator string, left, right object.Object) object.Object { 
+	
+	switch operator {
+		
+	case "==" : 
+		return nativeBoolean(left == right) 
+	case "!=" :
+		return nativeBoolean(left != right) 
+	default : 
+		return NULL
+
+	}
+
+} 
