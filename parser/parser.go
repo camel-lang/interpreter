@@ -310,6 +310,7 @@ func (p *Parser) parseFunctionLiterals() ast.Expression {
 	if !p.expectPeek(token.LPAREN) { 
 		return nil 
 	}
+	
 	foo.Parameters = p.parseFunctionParameters() 
 	if !p.expectPeek(token.LBRACE) { 
 		return nil
@@ -322,7 +323,7 @@ func (p *Parser) parseFunctionLiterals() ast.Expression {
 func (p *Parser) parseFunctionParameters() []*ast.Identifier { 
 	
 	identifiers := []*ast.Identifier{}	
-	for !p.curTokenIs(token.RPAREN) { 
+	for p.peekTokenIs(token.RPAREN) { 
 		p.nextToken()
 		return nil	
 	}
