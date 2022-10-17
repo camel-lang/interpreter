@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"camel/lexer"
 	"camel/parser"
+	"camel/eval"
 	"fmt"
 	"io"
 )
@@ -44,6 +45,7 @@ func Start(in io.Reader, out io.Writer) {
 		lex := lexer.New(line)
 		parser := parser.New(lex)
 		program := parser.ParseProgram()
-		fmt.Printf("%s\n", program.String())
+		evaluated := eval.Eval(program)
+		io.WriteString(out, evaluated.Inspect() + "\n") 
 	}
 }
