@@ -2,7 +2,7 @@ package object
 
 
 func NewEnvironment() *Environment { 
-	store = make(map[string]Object) 
+	store := make(map[string]Object) 
 	return &Environment{store: store} 
 }
 
