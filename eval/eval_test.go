@@ -41,7 +41,8 @@ func testEval(input string) object.Object {
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	program := p.ParseProgram()
-	return Eval(program)
+	env := object.NewEnvironment() 
+	return Eval(program, env) 
 }
 
 func TestEvalBooleanExpression(t *testing.T) { 
