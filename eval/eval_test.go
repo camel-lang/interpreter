@@ -176,6 +176,10 @@ func TestErrorHandling(t *testing.T) {
 			"Unknown operator: no + operator registered for BOOLEAN",
 		},
 		{
+			"5; true + true - false  + false; 5",
+			"Unknown operator: no + operator registered for BOOLEAN",
+		},
+		{
 			"if (10 > 1) { true + false; }",
 			"Unknown operator: no + operator registered for BOOLEAN",
 		},
