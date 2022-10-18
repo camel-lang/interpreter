@@ -5,6 +5,7 @@ import (
 	"camel/lexer"
 	"camel/parser"
 	"camel/eval"
+	"camel/object"
 	"fmt"
 	"io"
 )
@@ -32,6 +33,7 @@ const PROMPT = ">> "
 func Start(in io.Reader, out io.Writer) {
 
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment() 
 
 	for {
 
@@ -45,7 +47,10 @@ func Start(in io.Reader, out io.Writer) {
 		lex := lexer.New(line)
 		parser := parser.New(lex)
 		program := parser.ParseProgram()
-		evaluated := eval.Eval(program)
-		io.WriteString(out, evaluated.Inspect() + "\n") 
+		evaluated := eval.Eval(program, env)
+		if evaluated != nil { 
+			io.WriteString(out, evaluated.Inspect()) 
+			io.WriteString(out, "\n") 
+		}
 	}
 }
