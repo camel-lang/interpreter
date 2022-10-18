@@ -15,10 +15,10 @@ func Eval(node ast.Node) object.Object {
 	switch node := node.(type) { 
 	
 	case *ast.Program : 
-		return evalStatements(node.Statements) 
+		return evalProgram(node) 
 	
 	case *ast.BlockStatement : 
-		return evalStatements(node.Statements) 
+		return evalBlockStatement(node)  
 
 	case *ast.ExpressionStatement : 
 		return Eval(node.Expression) 
@@ -136,7 +136,9 @@ func evalBangBoolean(boolean *object.Boolean) *object.Boolean {
 	}
 
 } 
-func evalMinusPrefixOperator(obj object.Object) object.Object { 
+func evalMinusPrefixOperator(
+	obj object.Object, 
+) object.Object { 
 	if obj.Type() != object.INTEGER_OBJ { 
 		return NULL
 	}
@@ -197,7 +199,10 @@ func parseIntegerInfixExpression(
 	}
 }
 
-func parseBooleanInfixExpression(operator string, left, right object.Object) object.Object { 
+func parseBooleanInfixExpression(
+	operator string, 
+	left, right object.Object, 
+) object.Object { 
 	
 	switch operator {
 		
@@ -209,5 +214,32 @@ func parseBooleanInfixExpression(operator string, left, right object.Object) obj
 		return NULL
 
 	}
+}
 
+func evalBlockStatement(block *ast.BlockStatement) object.Object { 
+
+	var result object.Object 
+	
+	for _, statement := range block.Statements { 
+		result = Eval(statement) 
+	
+		if returnValue, ok := result.(*object.ReturnValue); ok { 
+			return returnValue
+		}
+	} 
+	return result 
 } 
+
+func evalProgram(program *ast.Program) object.Object { 
+
+	var result object.Object 
+	
+	for _, statement := range program.Statements { 
+		result = Eval(statement) 
+	
+		if returnValue, ok := result.(*object.ReturnValue); ok { 
+			return returnValue.Value 
+		}
+	} 
+	return result 
+}  
