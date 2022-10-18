@@ -257,4 +257,13 @@ func evalProgram(program *ast.Program) object.Object {
 
 func newError(format string, a ...interface{}) *object.Error { 
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
+
+func isError(obj object.Object) bool { 
+
+	if obj.Type == object.ERROR_OBJ {
+		return true 
+	} else { 
+		return false 
+	} 
 }  
