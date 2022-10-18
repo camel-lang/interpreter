@@ -195,6 +195,10 @@ if (10 > 1) {
 `,
 			"Unknown operator: no + operator registered for BOOLEAN",
 		},
+		{ 
+			"foobar", 
+			"Identifier not found: foobar", 
+		}, 
 	}
 
 	for _, tt := range tests {
