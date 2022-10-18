@@ -1,6 +1,7 @@
 package eval
 
 import ( 
+	"fmt"
 	"camel/ast" 
 	"camel/object" 
 )
@@ -242,4 +243,8 @@ func evalProgram(program *ast.Program) object.Object {
 		}
 	} 
 	return result 
+}
+
+func newError(format string, a ...interface{}) *object.Error { 
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }  
