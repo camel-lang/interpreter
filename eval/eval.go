@@ -61,7 +61,6 @@ func evalIfExpression(ie *ast.IfExpression) object.Object {
 	} else { 
 		return NULL
 	} 
-
 }
 
 
@@ -107,7 +106,7 @@ func evalPrefixExpression(operator string, obj object.Object) object.Object {
 	case "-": 
 		return evalMinusPrefixOperator(obj) 
 	default : 
-		return nil
+		return newError("Unknown operator: operator %s is not a valid prefix operator", operator) 
 	}
 }
 
@@ -141,7 +140,7 @@ func evalMinusPrefixOperator(
 	obj object.Object, 
 ) object.Object { 
 	if obj.Type() != object.INTEGER_OBJ { 
-		return NULL
+		return newError("Invalid operator: type %s doesn't support '-' operator", obj.Type())
 	}
 
 	val := obj.(*object.Integer).Value
@@ -164,8 +163,11 @@ func evalInfixExpression(
 		 right.Type() == object.BOOLEAN_OBJ : 
 		return parseBooleanInfixExpression(operator, left, right) 
 
+	case left.Type() != right.Type() : 
+		return newError("Type mismatch: invalid operator %s for types %s %s", 
+		operator, left.Type(), right.Type()) 
 	default : 
-		return NULL
+		return newError("Unknown operator: no %s operator registered for %s", operator, left.Type())
 	}
 } 
 
@@ -196,7 +198,7 @@ func parseIntegerInfixExpression(
 	case "!=": 
 		return nativeBoolean(leftVal != rightVal)  
 	default : 
-		return NULL
+		return newError("Unknown operator: no %s operator registered for Integers", operator)
 	}
 }
 
@@ -212,7 +214,7 @@ func parseBooleanInfixExpression(
 	case "!=" :
 		return nativeBoolean(left != right) 
 	default : 
-		return NULL
+		return newError("Unknown operator: no %s operator registered for BOOLEAN", operator)
 
 	}
 }
@@ -224,8 +226,12 @@ func evalBlockStatement(block *ast.BlockStatement) object.Object {
 	for _, statement := range block.Statements { 
 		result = Eval(statement) 
 	
-		if returnValue, ok := result.(*object.ReturnValue); ok { 
-			return returnValue
+		if result != nil { 
+			rt := result.Type() 
+			if rt == object.ERROR_OBJ || 
+			   rt == object.RETURN_VALUE_OBJ {
+				return result 
+			}
 		}
 	} 
 	return result 
@@ -238,8 +244,12 @@ func evalProgram(program *ast.Program) object.Object {
 	for _, statement := range program.Statements { 
 		result = Eval(statement) 
 	
-		if returnValue, ok := result.(*object.ReturnValue); ok { 
-			return returnValue.Value 
+		switch result := result.(type) { 
+			
+		case *object.Error: 
+			return result 
+		case *object.ReturnValue: 
+			return result.Value
 		}
 	} 
 	return result 
