@@ -31,6 +31,20 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		body   := node.Body 
 		
 		return &object.Function{Parameters: params, Body: body, Env: env} 
+	
+	case *ast.CallExpression : 
+		
+		function := Eval(node.Function, env) 
+		if isError(function) { 
+			return function 
+		} 
+
+		args := evalExpressions(node.Arguments, env) 
+		if len(args) == 1 && isError(args[0]) { 
+			return args[0]	
+		}
+
+		return applyFunction(function, args) 
 
 	case *ast.PrefixExpression:
 		right := Eval(node.Right, env)
@@ -76,6 +90,59 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	}
 	return nil
+}
+
+func evalExpressions(
+	exps []ast.Expression,
+	env *object.Environment, 	
+) []object.Object { 
+	
+	var objs []object.Object
+
+	for _, e := range exps { 
+		evaluated := Eval(e, env)
+		if isError(evaluated) { 
+			return []object.Object{evaluated}
+		}
+		objs = append(objs, evaluated)
+	} 
+
+	return objs	
+} 
+
+func applyFunction(
+	f object.Object, 
+	args []object.Object,
+) object.Object { 
+
+	fn , ok := f.(*object.Function) 
+	if !ok { 
+		return newError("Invalid function call, %s is not a function", f.Type()) 
+	}
+
+	extendedEnv := extendFunctionEnv(fn, args) 
+	evaluated := Eval(fn.Body, extendedEnv) 
+	return unwrapReturnValue(evaluated) 
+}
+
+func unwrapReturnValue(obj object.Object) object.Object { 
+	if retVal, ok := obj.(*object.ReturnValue) ; ok { 
+		return retVal.Value
+	}
+	return obj
+} 
+
+func extendFunctionEnv(
+	f *object.Function, 
+	args []object.Object,
+) *object.Environment {
+	
+	extendedEnv := object.NewEnclosedEnvironment(f.Env)
+	for id, p := range f.Parameters { 
+		extendedEnv.Set(p.Value, args[id])
+	} 
+
+	return extendedEnv
 }
 
 func evalIdentifier(
