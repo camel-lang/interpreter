@@ -8,7 +8,7 @@ func NewEnclosedEnvironment(out *Environment) *Environment {
 
 func NewEnvironment() *Environment {
 	store := make(map[string]Object)
-	return &Environment{store: store, out: nil}
+	return &Environment{store: store, outer: nil}
 }
 
 type Environment struct {
@@ -20,6 +20,7 @@ func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil { 
 		obj, ok := e.outer.Get(name)
+		return obj, ok 
 	}
 	return obj, ok
 }
