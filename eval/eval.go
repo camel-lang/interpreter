@@ -25,6 +25,13 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.ExpressionStatement:
 		return Eval(node.Expression, env)
 
+	case *ast.FunctionLiteral : 
+
+		params := node.Parameters 
+		body   := node.Body 
+		
+		return &object.Function{Parameters: params, Body: body, Env: env} 
+
 	case *ast.PrefixExpression:
 		right := Eval(node.Right, env)
 		if isError(right) {
