@@ -17,6 +17,7 @@ const (
 	PRODUCT
 	PREFIX
 	CALL
+	INDEX
 )
 
 var precedences = map[token.TokenType]int{
@@ -32,6 +33,7 @@ var precedences = map[token.TokenType]int{
 	token.GT: LESSGREATER,
 
 	token.LPAREN: CALL,
+	token.LBRACKET: INDEX,
 }
 
 type (
@@ -85,6 +87,7 @@ func New(lex *lexer.Lexer) *Parser {
 	parser.registerInfix(token.EQ, parser.parseInfixExpression)
 	parser.registerInfix(token.NOT_EQ, parser.parseInfixExpression)
 	parser.registerInfix(token.LPAREN, parser.parseCallExpression)
+	parser.registerInfix(token.LBRACKET, parser.parseIndexExpression)
 
 	return parser
 }
@@ -255,6 +258,20 @@ func (p *Parser) parseExpressionList(end token.TokenType) []ast.Expression {
 	}
 
 	return list 
+} 
+
+func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression { 
+	
+	exp := &ast.IndexExpression{Token: p.curToken, Left: left} 
+	
+	p.nextToken() 
+	exp.Index = p.parseExpression(LOWEST) 
+
+	if !p.expectPeek(token.RBRACKET) { 
+		return nil 
+	} 
+
+	return exp 
 } 
 
 func (p *Parser) parsePrefixExpression() ast.Expression {
