@@ -12,6 +12,7 @@ const (
 	EOF     = "EOF"
 
 	INT   = "INT"
+	STRING = "STRING" 
 	IDENT = "IDENT"
 
 	PLUS     = "+"
