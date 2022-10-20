@@ -117,15 +117,21 @@ func applyFunction(
 	f object.Object, 
 	args []object.Object,
 ) object.Object { 
+	
+	switch fn := f.(type) { 
+	
+	case *object.Function :  
+		extendedEnv := extendFunctionEnv(fn, args) 
+		evaluated := Eval(fn.Body, extendedEnv) 
+		return unwrapReturnValue(evaluated) 
 
-	fn , ok := f.(*object.Function) 
-	if !ok { 
+	case *object.Builtin : 
+		return fn.Fn(args...) 		
+		
+	default : 
 		return newError("Invalid function call, %s is not a function", f.Type()) 
-	}
 
-	extendedEnv := extendFunctionEnv(fn, args) 
-	evaluated := Eval(fn.Body, extendedEnv) 
-	return unwrapReturnValue(evaluated) 
+	}
 }
 
 func unwrapReturnValue(obj object.Object) object.Object { 
@@ -153,12 +159,16 @@ func evalIdentifier(
 	env *object.Environment,
 ) object.Object {
 
-	val, ok := env.Get(node.Value)
-	if !ok {
-		fmt.Println(env)
-		return newError("Identifier not found: %s", node.Value)
+	if val, ok := env.Get(node.Value); ok { 
+		return val 
+	} 
+
+	if builtin, ok := builtins[node.Value]; ok { 
+		return builtin
 	}
-	return val
+
+	fmt.Println(env)
+	return newError("Identifier not found: %s", node.Value)
 
 }
 func evalIfExpression(
