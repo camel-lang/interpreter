@@ -41,17 +41,17 @@ func testEval(input string) object.Object {
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	program := p.ParseProgram()
-	env := object.NewEnvironment() 
-	return Eval(program, env) 
+	env := object.NewEnvironment()
+	return Eval(program, env)
 }
 
-func TestEvalBooleanExpression(t *testing.T) { 
+func TestEvalBooleanExpression(t *testing.T) {
 
-	tests := []struct{ 
-		input string 
+	tests := []struct {
+		input         string
 		expectedValue bool
-	}{ 
-		{"true", true}, 
+	}{
+		{"true", true},
 		{"false", false},
 		{"1 < 2", true},
 		{"1 > 2", false},
@@ -72,32 +72,31 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"(1 > 2) == false", true},
 	}
 
-	for _ , tt := range tests { 
-		evaluated := testEval(tt.input) 
-		testBooleanObject(t, evaluated, tt.expectedValue) 
-	} 
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testBooleanObject(t, evaluated, tt.expectedValue)
+	}
 }
 
-func TestBangOperator(t *testing.T) { 
-	
-	tests := []struct { 
-		input string 
+func TestBangOperator(t *testing.T) {
+
+	tests := []struct {
+		input         string
 		expectedValue bool
-	}{ 
-		{"!true", false}, 
-		{"!!false", false}, 
-		{"!!5", true}, 
+	}{
+		{"!true", false},
+		{"!!false", false},
+		{"!!5", true},
 		{"!3", false},
 		{"!0", true},
 	}
-	
-	for _ , tt := range tests { 
-		evaluated := testEval(tt.input) 
-		testBooleanObject(t, evaluated, tt.expectedValue) 
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testBooleanObject(t, evaluated, tt.expectedValue)
 	}
 
 }
-
 
 func TestIfElseExpressions(t *testing.T) {
 	tests := []struct {
@@ -147,7 +146,7 @@ func TestReturnStatements(t *testing.T) {
 		{"9; return 2 * 5; 9;", 10},
 	}
 	for _, tt := range tests {
-		expectedValue := testEval(tt.input) 
+		expectedValue := testEval(tt.input)
 		testIntegerObject(t, expectedValue, tt.expected)
 	}
 }
@@ -196,10 +195,10 @@ if (10 > 1) {
 `,
 			"Unknown operator: no + operator registered for BOOLEAN",
 		},
-		{ 
-			"foobar", 
-			"Identifier not found: foobar", 
-		}, 
+		{
+			"foobar",
+			"Identifier not found: foobar",
+		},
 	}
 
 	for _, tt := range tests {
@@ -218,7 +217,6 @@ if (10 > 1) {
 		}
 	}
 }
-
 
 func TestLetStatements(t *testing.T) {
 	tests := []struct {
@@ -250,11 +248,11 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 			expected, result.Value)
 		return false
 	}
-	return true 
+	return true
 }
 
-func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool { 
-	
+func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
+
 	result, ok := obj.(*object.Boolean)
 
 	if !ok {
@@ -267,16 +265,15 @@ func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 			expected, result.Value)
 		return false
 	}
-	return true 
+	return true
 
 }
 
-func testNullObject(t *testing.T, obj object.Object) bool { 
-	
-	if obj != NULL { 
-		t.Errorf("obj is not NULL, got: %T (+%v)", obj, obj)  
-		return false 
+func testNullObject(t *testing.T, obj object.Object) bool {
+
+	if obj != NULL {
+		t.Errorf("obj is not NULL, got: %T (+%v)", obj, obj)
+		return false
 	}
 	return true
 }
- 

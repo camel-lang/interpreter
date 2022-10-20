@@ -2,10 +2,10 @@ package repl
 
 import (
 	"bufio"
-	"camel/lexer"
-	"camel/parser"
 	"camel/eval"
+	"camel/lexer"
 	"camel/object"
+	"camel/parser"
 	"fmt"
 	"io"
 )
@@ -33,7 +33,7 @@ const PROMPT = ">> "
 func Start(in io.Reader, out io.Writer) {
 
 	scanner := bufio.NewScanner(in)
-	env := object.NewEnvironment() 
+	env := object.NewEnvironment()
 
 	for {
 
@@ -48,9 +48,9 @@ func Start(in io.Reader, out io.Writer) {
 		parser := parser.New(lex)
 		program := parser.ParseProgram()
 		evaluated := eval.Eval(program, env)
-		if evaluated != nil { 
-			io.WriteString(out, evaluated.Inspect()) 
-			io.WriteString(out, "\n") 
+		if evaluated != nil {
+			io.WriteString(out, evaluated.Inspect())
+			io.WriteString(out, "\n")
 		}
 	}
 }

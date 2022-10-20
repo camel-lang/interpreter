@@ -1,112 +1,110 @@
 package object
 
-import ( 
+import (
+	"bytes"
+	"camel/ast"
 	"fmt"
-	"camel/ast" 
 	"strings"
-	"bytes" 
 )
 
 type ObjectType string
 
-const ( 
-
-	INTEGER_OBJ = "INTEGER"	
-	BOOLEAN_OBJ = "BOOLEAN" 
-	NULL        = "NULL"
-	RETURN_VALUE_OBJ = 	"RETURN_VALUE"
-	ERROR_OBJ = "ERROR"
-	FUNCTION_OBJ = "FUNCTION"
+const (
+	INTEGER_OBJ      = "INTEGER"
+	BOOLEAN_OBJ      = "BOOLEAN"
+	NULL             = "NULL"
+	RETURN_VALUE_OBJ = "RETURN_VALUE"
+	ERROR_OBJ        = "ERROR"
+	FUNCTION_OBJ     = "FUNCTION"
 )
 
-type Object interface { 
-	Type() ObjectType 
-	Inspect() string 
-} 
+type Object interface {
+	Type() ObjectType
+	Inspect() string
+}
 
-
-type Integer struct { 
+type Integer struct {
 	Value int64
 }
 
-func (i *Integer) Type() ObjectType { 
+func (i *Integer) Type() ObjectType {
 	return INTEGER_OBJ
 }
-func (i *Integer) Inspect() string { 
-	return fmt.Sprintf("%d" , i.Value) 
+func (i *Integer) Inspect() string {
+	return fmt.Sprintf("%d", i.Value)
 }
 
-type Boolean struct { 
+type Boolean struct {
 	Value bool
 }
 
-func (b *Boolean) Type() ObjectType { 
+func (b *Boolean) Type() ObjectType {
 	return BOOLEAN_OBJ
 }
-func (b *Boolean) Inspect() string { 
-	return fmt.Sprintf("%t" , b.Value) 
+func (b *Boolean) Inspect() string {
+	return fmt.Sprintf("%t", b.Value)
 }
 
-type Null struct {} 
+type Null struct{}
 
-func (n *Null) Type() ObjectType { 
-	return NULL 
+func (n *Null) Type() ObjectType {
+	return NULL
 }
 
-func (n *Null) Inspect() string { 
+func (n *Null) Inspect() string {
 	return "null"
 }
 
-type ReturnValue struct { 
+type ReturnValue struct {
 	Value Object
 }
 
-func (r *ReturnValue) Type() ObjectType { 
-	return RETURN_VALUE_OBJ 
+func (r *ReturnValue) Type() ObjectType {
+	return RETURN_VALUE_OBJ
 }
 
-func (r *ReturnValue) Inspect() string { 
-	return r.Value.Inspect() 
+func (r *ReturnValue) Inspect() string {
+	return r.Value.Inspect()
 }
 
-type Error struct { 
-	Message string 
+type Error struct {
+	Message string
 }
 
-func (e *Error) Type() ObjectType { 
-	return ERROR_OBJ 
-} 
-func (e *Error) Inspect() string { 
+func (e *Error) Type() ObjectType {
+	return ERROR_OBJ
+}
+func (e *Error) Inspect() string {
 	return "Error: " + e.Message
 }
 
-type Function struct { 
+type Function struct {
 	Parameters []*ast.Identifier
-	Body *ast.BlockStatement
-	Env *Environment 
+	Body       *ast.BlockStatement
+	Env        *Environment
 }
 
-func (f *Function) Type() ObjectType { 
-	return FUNCTION_OBJ 
-} 
+func (f *Function) Type() ObjectType {
+	return FUNCTION_OBJ
+}
 
-func (f *Function) Inspect() string { 
-	
-	var out bytes.Buffer 
-	
+func (f *Function) Inspect() string {
+
+	var out bytes.Buffer
+
 	params := []string{}
-	for _, p := range f.Parameters { 
-		params = append(params, p.String()) 
+	for _, p := range f.Parameters {
+		params = append(params, p.String())
 	}
-	
-	out.WriteString("fn") 
+
+	out.WriteString("fn")
 	out.WriteString("(")
 	out.WriteString(strings.Join(params, ", "))
 	out.WriteString(")")
 	out.WriteString(f.Body.String())
 	out.WriteString("{\n")
 	out.WriteString("\n}")
-	
-	return out.String() 
+
+	return out.String()
 
 }
