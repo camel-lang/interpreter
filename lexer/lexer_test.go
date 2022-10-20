@@ -18,6 +18,7 @@ let result = add(five , ten);
 2 != 3 
 "foobar" 
 "foo bar" 
+[2,3] 
 `
 
 	tests := []struct {
@@ -75,6 +76,11 @@ let result = add(five , ten);
 		{token.INT, "3"},
 		{token.STRING, "foobar"},
 		{token.STRING, "foo bar"}, 
+		{token.LBRACKET, "["},
+		{token.INT, "2"},
+		{token.COMMA, ","},
+		{token.INT, "3"},
+		{token.RBRACKET, "]"},
 		{token.EOF, ""},
 	}
 
