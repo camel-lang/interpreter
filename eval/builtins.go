@@ -1,8 +1,19 @@
 package eval
 
-import "camel/object"
+import (
+	"fmt"
+	"camel/object"
+)
 
 var builtins = map[string]*object.Builtin{
+	"chap": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args { 
+				fmt.Println(arg.Inspect()) 
+			}
+			return NULL
+		},
+	},	
 	"len": &object.Builtin{
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
