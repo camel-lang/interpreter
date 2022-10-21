@@ -75,7 +75,7 @@ let result = add(five , ten);
 		{token.NOT_EQ, "!="},
 		{token.INT, "3"},
 		{token.STRING, "foobar"},
-		{token.STRING, "foo bar"}, 
+		{token.STRING, "foo bar"},
 		{token.LBRACKET, "["},
 		{token.INT, "2"},
 		{token.COMMA, ","},

@@ -32,7 +32,7 @@ var precedences = map[token.TokenType]int{
 	token.LT: LESSGREATER,
 	token.GT: LESSGREATER,
 
-	token.LPAREN: CALL,
+	token.LPAREN:   CALL,
 	token.LBRACKET: INDEX,
 }
 
@@ -75,9 +75,9 @@ func New(lex *lexer.Lexer) *Parser {
 	parser.registerPrefix(token.LPAREN, parser.parseGroupedExpression)
 	parser.registerPrefix(token.IF, parser.parseIfExpression)
 	parser.registerPrefix(token.FUNCTION, parser.parseFunctionLiterals)
-	parser.registerPrefix(token.STRING , parser.parseStringLiteral)
-	parser.registerPrefix(token.LBRACKET, parser.parseArrayLiteral) 
-	parser.registerPrefix(token.LBRACE, parser.parseHashLiteral) 
+	parser.registerPrefix(token.STRING, parser.parseStringLiteral)
+	parser.registerPrefix(token.LBRACKET, parser.parseArrayLiteral)
+	parser.registerPrefix(token.LBRACE, parser.parseHashLiteral)
 
 	parser.registerInfix(token.PLUS, parser.parseInfixExpression)
 	parser.registerInfix(token.MINUS, parser.parseInfixExpression)
@@ -219,89 +219,89 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 	lit.Value = value
 	return lit
 }
- 
-func (p *Parser) parseStringLiteral() ast.Expression { 
-	return &ast.StringLiteral{ 
-		Token: p.curToken, 
+
+func (p *Parser) parseStringLiteral() ast.Expression {
+	return &ast.StringLiteral{
+		Token: p.curToken,
 		Value: p.curToken.Literal,
 	}
-	
-} 
 
-func (p *Parser) parseArrayLiteral() ast.Expression { 
+}
 
-	array := &ast.ArrayLiteral{Token: p.curToken} 
+func (p *Parser) parseArrayLiteral() ast.Expression {
+
+	array := &ast.ArrayLiteral{Token: p.curToken}
 	array.Elements = p.parseExpressionList(token.RBRACKET)
-	
+
 	return array
-} 
+}
 
-func (p *Parser) parseExpressionList(end token.TokenType) []ast.Expression { 
-	
+func (p *Parser) parseExpressionList(end token.TokenType) []ast.Expression {
+
 	list := []ast.Expression{}
-	
-	if p.peekTokenIs(end) { 
-		p.nextToken() 
+
+	if p.peekTokenIs(end) {
+		p.nextToken()
 		return list
-	} 		
+	}
 
-	p.nextToken() 
+	p.nextToken()
 	list = append(list, p.parseExpression(LOWEST))
-	
-	for p.peekTokenIs(token.COMMA) { 
-		p.nextToken() 
-		p.nextToken() 
-		list = append(list, p.parseExpression(LOWEST)) 
+
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+		list = append(list, p.parseExpression(LOWEST))
 	}
 
-	if !p.expectPeek(end) { 
-		return nil 
+	if !p.expectPeek(end) {
+		return nil
 	}
 
-	return list 
-} 
+	return list
+}
 
-func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression { 
-	
-	exp := &ast.IndexExpression{Token: p.curToken, Left: left} 
-	
-	p.nextToken() 
-	exp.Index = p.parseExpression(LOWEST) 
+func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 
-	if !p.expectPeek(token.RBRACKET) { 
-		return nil 
-	} 
+	exp := &ast.IndexExpression{Token: p.curToken, Left: left}
 
-	return exp 
-} 
+	p.nextToken()
+	exp.Index = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.RBRACKET) {
+		return nil
+	}
+
+	return exp
+}
 
 func (p *Parser) parseHashLiteral() ast.Expression {
-	
-	hash := &ast.HashLiteral{ Token: p.curToken } 
-	hash.Pairs = make(map[ast.Expression]ast.Expression) 
-	
-	for !p.peekTokenIs(token.RBRACE) { 
 
-		p.nextToken() 
-		key := p.parseExpression(LOWEST) 
-		if !p.expectPeek(token.COLON) { 
-			return nil 
-		} 
+	hash := &ast.HashLiteral{Token: p.curToken}
+	hash.Pairs = make(map[ast.Expression]ast.Expression)
+
+	for !p.peekTokenIs(token.RBRACE) {
+
+		p.nextToken()
+		key := p.parseExpression(LOWEST)
+		if !p.expectPeek(token.COLON) {
+			return nil
+		}
 		p.nextToken()
 
-		value := p.parseExpression(LOWEST) 
-		hash.Pairs[key] = value  
-	
-		if !p.peekTokenIs(token.RBRACE) && 
-		   !p.expectPeek(token.COMMA) { 
-			return nil 
-		} 
+		value := p.parseExpression(LOWEST)
+		hash.Pairs[key] = value
 
-	} 
+		if !p.peekTokenIs(token.RBRACE) &&
+			!p.expectPeek(token.COMMA) {
+			return nil
+		}
 
-	p.nextToken() 
-	return hash 
-} 
+	}
+
+	p.nextToken()
+	return hash
+}
 
 func (p *Parser) parsePrefixExpression() ast.Expression {
 

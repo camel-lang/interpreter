@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"camel/ast"
 	"fmt"
-	"strings"
 	"hash/fnv"
+	"strings"
 )
 
 type ObjectType string
@@ -13,10 +13,10 @@ type BuiltinFunction func(args ...Object) Object
 
 const (
 	INTEGER_OBJ      = "INTEGER"
-	STRING_OBJ 	     = "STRING" 
+	STRING_OBJ       = "STRING"
 	BOOLEAN_OBJ      = "BOOLEAN"
-	ARRAY_OBJ 		 = "ARRAY"
-	HASH_OBJ 		 = "HASH" 
+	ARRAY_OBJ        = "ARRAY"
+	HASH_OBJ         = "HASH"
 	NULL             = "NULL"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	ERROR_OBJ        = "ERROR"
@@ -40,17 +40,16 @@ func (i *Integer) Inspect() string {
 	return fmt.Sprintf("%d", i.Value)
 }
 
-type String struct { 
-	Value string 
+type String struct {
+	Value string
 }
 
-func (s *String) Type() ObjectType { 
+func (s *String) Type() ObjectType {
 	return STRING_OBJ
-} 
-func (s *String) Inspect() string { 
+}
+func (s *String) Inspect() string {
 	return s.Value
-} 
-
+}
 
 type Boolean struct {
 	Value bool
@@ -127,100 +126,98 @@ func (f *Function) Inspect() string {
 
 }
 
-type Builtin struct { 
+type Builtin struct {
 	Fn BuiltinFunction
 }
 
-func (b *Builtin) Type() ObjectType { 
+func (b *Builtin) Type() ObjectType {
 	return BUILTIN_OBJ
 }
-func (b *Builtin) Inspect() string { 
-	return "builtin function" 
+func (b *Builtin) Inspect() string {
+	return "builtin function"
 }
 
-
-type Array struct { 
+type Array struct {
 	Elements []Object
-} 
+}
 
-func (a *Array) Type() ObjectType { 
+func (a *Array) Type() ObjectType {
 	return ARRAY_OBJ
 }
-func (a *Array) Inspect() string { 
-	
-	var out bytes.Buffer 
-	
-	elems := []string{} 
-	for _, e := range a.Elements { 
+func (a *Array) Inspect() string {
+
+	var out bytes.Buffer
+
+	elems := []string{}
+	for _, e := range a.Elements {
 		elems = append(elems, e.Inspect())
 	}
-	out.WriteString("[") 
-	out.WriteString(strings.Join(elems, ", ")) 
-	out.WriteString("]") 
-	
-	return out.String() 
+	out.WriteString("[")
+	out.WriteString(strings.Join(elems, ", "))
+	out.WriteString("]")
+
+	return out.String()
 }
 
-type Hashable interface { 
-	HashKey() HashKey 
-} 
+type Hashable interface {
+	HashKey() HashKey
+}
 
-type HashKey struct { 
-	Type ObjectType
+type HashKey struct {
+	Type  ObjectType
 	Value uint64
-}   
+}
 
+func (b *Boolean) HashKey() HashKey {
 
-func (b *Boolean) HashKey() HashKey { 
-	
-	var value uint64 
-		
-	if b.Value { 
-		value = 1 
-	} else { 
-		value = 0 
-	} 
+	var value uint64
 
-	return HashKey{Type: b.Type(), Value: value} 
-} 
-func (i *Integer) HashKey() HashKey { 
+	if b.Value {
+		value = 1
+	} else {
+		value = 0
+	}
+
+	return HashKey{Type: b.Type(), Value: value}
+}
+func (i *Integer) HashKey() HashKey {
 	return HashKey{Type: i.Type(), Value: uint64(i.Value)}
-} 
-func (s *String) HashKey() HashKey { 
-	
-	h := fnv.New64a() 
-	h.Write([]byte(s.Value)) 
+}
+func (s *String) HashKey() HashKey {
+
+	h := fnv.New64a()
+	h.Write([]byte(s.Value))
 
 	return HashKey{Type: s.Type(), Value: h.Sum64()}
 }
 
-type HashPair struct { 
-	Key Object 
-	Value Object 
-} 
+type HashPair struct {
+	Key   Object
+	Value Object
+}
 
-type Hash struct { 
+type Hash struct {
 	Pairs map[HashKey]HashPair
 }
 
-func (h *Hash) Type() ObjectType { 
+func (h *Hash) Type() ObjectType {
 	return HASH_OBJ
-} 
+}
 
-func (h *Hash) Inspect() string { 
-	
-	var out bytes.Buffer 
-	
+func (h *Hash) Inspect() string {
+
+	var out bytes.Buffer
+
 	pairs := []string{}
 
-	for _, p := range h.Pairs { 
+	for _, p := range h.Pairs {
 		pairs = append(pairs, fmt.Sprintf("%s : %s",
-		p.Key.Inspect(), p.Value.Inspect()))
-	} 
+			p.Key.Inspect(), p.Value.Inspect()))
+	}
 
-	out.WriteString("{") 
-	out.WriteString(strings.Join(pairs, ", ")) 
-	out.WriteString("}") 
-	
-	return out.String() 
-}  
+	out.WriteString("{")
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
+
+	return out.String()
+}

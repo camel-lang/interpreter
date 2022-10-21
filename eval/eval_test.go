@@ -295,14 +295,14 @@ ourFunction(20) + first + second;`
 }
 
 func TestClosures(t *testing.T) {
-	
+
 	input := `
 let newAdder = fn(x) { fn(y) { x + y } } 
 let addTwo = newAdder(2) 
 addTwo(2)`
 
-	testIntegerObject(t, testEval(input), 4) 
-} 
+	testIntegerObject(t, testEval(input), 4)
+}
 func TestStringLiteral(t *testing.T) {
 	input := `"Hello World!"`
 
@@ -373,22 +373,22 @@ func testBuiltinFunctions(t *testing.T) {
 				t.Errorf("wrong error message. expected=%q, got=%q",
 					expected, errObj.Message)
 			}
-//		case []int:
-//			array, ok := evaluated.(*object.Array)
-//			if !ok {
-//				t.Errorf("obj not Array. got=%T (%+v)", evaluated, evaluated)
-//				continue
-//			}
-//
-//			if len(array.Elements) != len(expected) {
-//				t.Errorf("wrong num of elements. want=%d, got=%d",
-//					len(expected), len(array.Elements))
-//				continue
-//			}
-//
-//			for i, expectedElem := range expected {
-//				testIntegerObject(t, array.Elements[i], int64(expectedElem))
-//			}
+			//		case []int:
+			//			array, ok := evaluated.(*object.Array)
+			//			if !ok {
+			//				t.Errorf("obj not Array. got=%T (%+v)", evaluated, evaluated)
+			//				continue
+			//			}
+			//
+			//			if len(array.Elements) != len(expected) {
+			//				t.Errorf("wrong num of elements. want=%d, got=%d",
+			//					len(expected), len(array.Elements))
+			//				continue
+			//			}
+			//
+			//			for i, expectedElem := range expected {
+			//				testIntegerObject(t, array.Elements[i], int64(expectedElem))
+			//			}
 		}
 	}
 }
@@ -460,7 +460,6 @@ func TestArrayIndexExpressions(t *testing.T) {
 		}
 	}
 }
-
 
 func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 

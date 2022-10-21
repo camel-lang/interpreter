@@ -11,9 +11,9 @@ const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
 
-	INT   = "INT"
-	STRING = "STRING" 
-	IDENT = "IDENT"
+	INT    = "INT"
+	STRING = "STRING"
+	IDENT  = "IDENT"
 
 	PLUS     = "+"
 	MINUS    = "-"
@@ -31,10 +31,10 @@ const (
 	SEMICOLON = ";"
 	COLON     = ":"
 
-	LPAREN = "("
-	RPAREN = ")"
-	LBRACE = "{"
-	RBRACE = "}"
+	LPAREN   = "("
+	RPAREN   = ")"
+	LBRACE   = "{"
+	RBRACE   = "}"
 	LBRACKET = "["
 	RBRACKET = "]"
 

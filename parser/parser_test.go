@@ -408,7 +408,6 @@ func TestParsingHashLiteralsStringKeys(t *testing.T) {
 		t.Fatalf("exp is not ast.HashLiteral. got=%T", stmt.Expression)
 	}
 
-
 	expected := map[string]int64{
 		"one":   1,
 		"two":   2,
@@ -501,7 +500,6 @@ func TestParsingHashLiteralsIntegerKeys(t *testing.T) {
 	}
 }
 
-
 func TestParsingHashLiteralsWithExpressions(t *testing.T) {
 	input := `{"one": 0 + 1, "two": 10 - 8, "three": 15 / 5}`
 
@@ -547,7 +545,6 @@ func TestParsingHashLiteralsWithExpressions(t *testing.T) {
 		testFunc(value)
 	}
 }
-
 
 func TestBooleanExpression(t *testing.T) {
 	tests := []struct {
@@ -894,7 +891,6 @@ func TestParsingArrayLiterals(t *testing.T) {
 	testInfixExpression(t, array.Elements[1], 2, "*", 2)
 	testInfixExpression(t, array.Elements[2], 3, "+", 3)
 }
-
 
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	if s.TokenLiteral() != "let" {
