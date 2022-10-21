@@ -69,6 +69,39 @@ var builtins = map[string]*object.Builtin{
 			},
 
 		}, 
+		"push" : &object.Builtin{ 
+			Fn: func(args ...object.Object) object.Object { 
+				if len(args) != 2 { 
+					return newError(
+				"wrong number of arguments, " + 
+				"expected:2, got: %d", len(args),
+					) 
+				}
+			
+				arg , ok := args[0].(*object.Array) 
+
+				if !ok { 
+					return newError("argument to peek must be array," + 
+					" got %s" , args[0].Type())
+				} 
+	
+				elem := args[1] 
+				Elements := arg.Elements 
+				length := len(Elements) 
+				newElements := make(
+					[]object.Object, 	
+					length + 1,
+					length + 1)
+
+				copy(newElements, Elements) 
+				newElements[length] = elem
+				return &object.Array{Elements: newElements}
+			},
+
+		}, 
+
+
+		
 }
 
 
