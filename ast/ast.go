@@ -357,16 +357,16 @@ func (ie *IndexExpression) String() string {
 	return out.String()
 }
 
-type HashLiterals struct { 
+type HashLiteral struct { 
 	Token token.Token 
 	Pairs map[Expression]Expression
 }  
 
-func (hl *HashLiterals) TokenLiteral() string { 
+func (hl *HashLiteral) TokenLiteral() string { 
 	return hl.Token.Literal
 } 
-func (hl *HashLiterals) expressionNode() {} 
-func (hl *HashLiterals) String() string { 
+func (hl *HashLiteral) expressionNode() {} 
+func (hl *HashLiteral) String() string { 
 	var out bytes.Buffer 
 	
 	out.WriteString("{") 
