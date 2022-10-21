@@ -26,6 +26,26 @@ var builtins = map[string]*object.Builtin{
 				} 
 			},
 		},
+		"peek" : &object.Builtin{ 
+			Fn: func(args ...object.Object) object.Object { 
+				if len(args) != 1 { 
+					return newError(
+				"wrong number of arguments, " + 
+				"expected:1, got: %d", len(args),
+					) 
+				}
+			
+				arg , ok := args[0].(*object.Array) 
+
+				if !ok { 
+					return newError("argument to peek must be array," + 
+					" got %s" , args[0].Type())
+				} 
+				
+				arr := arg.Elements 
+				return arr[len(arr) - 1]
+			},
+		},
 }
 
 
