@@ -231,11 +231,15 @@ func (ie *IfExpression) String() string {
 	out.WriteString("if")
 	out.WriteString(ie.Condition.String())
 	out.WriteString(" ")
+	out.WriteString("{\n    ")
 	out.WriteString(ie.Consequence.String())
+	out.WriteString("\n} ")
 
 	if ie.Alternative != nil {
 		out.WriteString("else")
+		out.WriteString("{\n    ")
 		out.WriteString(ie.Alternative.String())
+		out.WriteString("\n}    ")
 	}
 
 	return out.String()
